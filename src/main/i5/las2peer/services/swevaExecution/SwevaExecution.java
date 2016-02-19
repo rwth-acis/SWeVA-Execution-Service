@@ -100,8 +100,6 @@ public class SwevaExecution extends Service {
 
 
         String result;
-
-
         try {
             result = javaScriptEnvironmentManager.invokeFunction("executeComposable", composable, data.toJSONString(), input.toJSONString());
         } catch (Exception e) {
@@ -109,7 +107,6 @@ public class SwevaExecution extends Service {
             return new HttpResponse(result, HttpURLConnection.HTTP_SERVER_ERROR);
 
         }
-
         return new HttpResponse(result, HttpURLConnection.HTTP_OK);
     }
 
