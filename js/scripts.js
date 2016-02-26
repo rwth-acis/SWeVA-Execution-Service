@@ -1,7 +1,7 @@
 function executeComposable (composable, data, input) {
     var manager = new sweva.ExecutionManager();
-    manager.setup(composable);
-    
+    manager.setup(JSON.parse(composable));
+    resultJSON="";
     manager.execute(
     JSON.parse(data),
     JSON.parse(input)

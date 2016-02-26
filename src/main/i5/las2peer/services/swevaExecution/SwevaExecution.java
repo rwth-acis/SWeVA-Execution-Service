@@ -73,7 +73,7 @@ public class SwevaExecution extends Service {
         // instantiate a database manager to handle database connection pooling and credentials
         try {
             javaScriptEnvironmentManager = new JavaScriptEnvironmentManager(
-                    new String[]{"http://localhost:5001/core.build.js", "./js/scripts.js"});
+                    new String[]{"http://localhost:8021/SWeVA-Core/app/core.build.js", "./js/scripts.js"});
             jobManager = new JobManager();
             scheduler.scheduleAtFixedRate(() -> jobManager.executeJobs(javaScriptEnvironmentManager), 0, 10, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class SwevaExecution extends Service {
     }
 
     @POST
-    @Path("execute/{composable}")
+    @Path("execute")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Composable execution",
@@ -92,16 +92,17 @@ public class SwevaExecution extends Service {
             @ApiResponse(code = HttpURLConnection.HTTP_SERVER_ERROR, message = "Something went wrong"),
             @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Successfully executed")
     })
-    public HttpResponse executeComposable(@PathParam("composable") String composable, @ContentParam() String content) {
+    public HttpResponse executeComposable(@ContentParam() String content) {
 
         JSONObject body = (JSONObject) JSONValue.parse(content);
+        JSONObject composable = (JSONObject) body.get("composable");
         JSONObject data = (JSONObject) body.get("data");
         JSONObject input = (JSONObject) body.get("input");
 
 
         String result;
         try {
-            result = javaScriptEnvironmentManager.invokeFunction("executeComposable", composable, data.toJSONString(), input.toJSONString());
+            result = javaScriptEnvironmentManager.invokeFunction("executeComposable", composable.toJSONString(), data.toJSONString(), input.toJSONString());
         } catch (Exception e) {
             result = e.getMessage();
             return new HttpResponse(result, HttpURLConnection.HTTP_SERVER_ERROR);

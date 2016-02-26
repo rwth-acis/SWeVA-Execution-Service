@@ -5,7 +5,7 @@
 cd %~p0
 cd ..
 set BASE=%CD%
-set CLASSPATH="%BASE%/lib/*;"
+set CLASSPATH="%BASE%/lib/*;%BASE%/export/jars/*;"
 
-java -cp %CLASSPATH% i5.las2peer.tools.L2pNodeLauncher -w -p 9011 uploadStartupDirectory('etc/startup') startService('i5.las2peer.services.swevaExecution.SwevaExecution','TemplateServicePass') startWebConnector interactive
+java -cp %CLASSPATH% i5.las2peer.tools.L2pNodeLauncher -w -p 9011 uploadStartupDirectory('etc/startup') startService('i5.las2peer.services.swevaExecution.SwevaExecution@1.0') startWebConnector
 pause

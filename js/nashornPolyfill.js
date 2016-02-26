@@ -121,7 +121,7 @@ XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     this._method = method.trim().toUpperCase();
     this._url = url;
     this._async = async || true;
-    this.readyState = 1;
+    this.readyState = 1;    
     setTimeout(this.onreadystatechange, 0);
 }
 
@@ -153,13 +153,14 @@ XMLHttpRequest.prototype.send = function (data) {
     phaser.register();
     httpclient.execute(request, new org.apache.http.concurrent.FutureCallback({
         completed: function (response) {
-            
+           
             self.readyState = 4;
             var entity = response.getEntity();
             //get response
             var Util = Java.type('org.apache.http.util.EntityUtils');
             
             self.responseText = self.response = Util.toString(entity, 'UTF-8')//remove BOM marker
+            
             //get status
             self.status = response.getStatusLine().getStatusCode();
             self.statusText = response.getStatusLine();
@@ -188,8 +189,10 @@ XMLHttpRequest.prototype.send = function (data) {
             for (var i = 0; i < headers.length; i++) {
                 self._responseHeaders[headers[i].getName()] = headers[i].getValue();
             }
-            setTimeout(self.onreadystatechange, 0);
-            phaser.arriveAndDeregister();
+            
+            setTimeout(self.onreadystatechange, 1);
+            onTaskFinished();
+            
         }
 }));
 
